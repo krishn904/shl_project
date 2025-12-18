@@ -2,7 +2,6 @@ import pandas as pd
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import List
-from fastapi.responses import RedirectResponse
 import os
 
 app = FastAPI(title="SHL Recommendation API")
@@ -40,8 +39,7 @@ class RecommendationResponse(BaseModel):
 # 1. Home Page (Fixes the "404 Not Found" error)
 @app.get("/")
 async def root():
-    # This command tells the browser to automatically jump to the /docs page
-    return RedirectResponse(url='/docs')
+    return {"message": "API is running. Visit /docs for the interactive UI."}
 
 # 2. Health Check (Required)
 @app.get("/health")
