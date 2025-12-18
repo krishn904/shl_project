@@ -1,17 +1,14 @@
 import streamlit as st
 import requests
 
-# Set page title and icon
 st.set_page_config(page_title="SHL Assessment Finder", page_icon="🔍")
-
 st.title("🎯 SHL Assessment Recommender")
 st.write("Enter a job description or skill query to find the best SHL assessments.")
 
-# API URL - REPLACE THIS WITH YOUR ACTUAL RENDER URL
-# Ensure it ends with /recommend
-API_URL = "https://shl-project-aooj.onrender.com"
+# --- THE FIX IS HERE ---
+# Added /recommend to the end of your URL
+API_URL = "https://shl-project-aooj.onrender.com/recommend" 
 
-# User Input Area
 query = st.text_area("What role or skills are you hiring for?", 
                      placeholder="e.g., Hiring for a Python developer with SQL skills...")
 
@@ -19,7 +16,7 @@ if st.button("Find Assessments"):
     if query:
         with st.spinner('Searching for matches...'):
             try:
-                # Call your Render API
+                # Ensure the JSON key "query" matches your QueryRequest model
                 response = requests.post(API_URL, json={"query": query})
                 
                 if response.status_code == 200:
@@ -37,8 +34,9 @@ if st.button("Find Assessments"):
                     else:
                         st.warning("No specific assessments found for this query.")
                 else:
+                    # This will now show 200 instead of 405
                     st.error(f"API Error: Received status code {response.status_code}")
             except Exception as e:
-                st.error(f"Failed to connect to the API. Make sure your Render URL is correct. Error: {e}")
+                st.error(f"Failed to connect to the API. Error: {e}")
     else:
         st.info("Please enter a query before clicking the button.")
