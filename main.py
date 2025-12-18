@@ -2,6 +2,7 @@ import pandas as pd
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import List
+from fastapi.responses import RedirectResponse
 import os
 
 app = FastAPI(title="SHL Recommendation API")
@@ -39,7 +40,8 @@ class RecommendationResponse(BaseModel):
 # 1. Home Page (Fixes the "404 Not Found" error)
 @app.get("/")
 async def root():
-    return {"message": "API is running. Visit /docs for the interactive UI."}
+    # This command tells the browser to automatically jump to the /docs page
+    return RedirectResponse(url='/docs')
 
 # 2. Health Check (Required)
 @app.get("/health")
@@ -91,4 +93,3 @@ if __name__ == "__main__":
     # Use environment port for Render deployment
     port = int(os.environ.get("PORT", 8000))
     uvicorn.run(app, host="0.0.0.0", port=port)
-
